@@ -1,5 +1,5 @@
 
-https://user-images.githubusercontent.com/29563847/206020682-7396c2cc-318e-44ab-a868-8313235ab1b4.mp4
+https://user-images.githubusercontent.com/29563847/206035700-612027cf-af2e-4d0a-bb61-a21d3cb2d056.mp4
 
 This is an interactive grass shader. It fakes some wind (strength and speed is adjustable) and also bends around multiple colliders.
 
@@ -16,6 +16,9 @@ The Wind bending is additionally to the other bending and is done using noise fu
 It's currently a normal HLSL shader and not yet a ShaderGraph. Shadow casting works in the demo but is sometimes offset by some value in my other scenes. 
 
 Maybe due to the scaling of some object. ShaderGraph isn't possible yet because you cannot set custom properties per object in SG yet.
+
+
+
 
 
 
