@@ -59,13 +59,9 @@ public class GrassShaper : MonoBehaviour
         }
         
         Debug.Log($"{counter} scans, {hits} grass points ");
-        Debug.Log("assigning new array size:" + targetGrassSpawner.grassPositions.Length);
+        Debug.Log("assigning new array size:" + newSpots.Count);
         
-        targetGrassSpawner.grassPositions = new Vector3[hits];
-        
-        for (var i = 0; i < hits; i++)
-        {
-            targetGrassSpawner.grassPositions[i] = newSpots[i];
-        }
+        targetGrassSpawner.UpdateGrassPositions(newSpots);
+      
     }
 }
