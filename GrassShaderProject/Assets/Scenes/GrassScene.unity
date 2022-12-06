@@ -418,7 +418,7 @@ ParticleSystem:
   m_GameObject: {fileID: 377356152}
   serializedVersion: 8
   lengthInSec: 0.05
-  simulationSpeed: 1.88
+  simulationSpeed: 2
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -984,7 +984,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.44
+      scalar: 2
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -5808,7 +5808,7 @@ MonoBehaviour:
     type: 3}
   meshSize: {x: 3, y: 2, z: 3}
   randomPositionOffset: 0.18
-  positionOffset: {x: 0, y: -0.1, z: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
   shadowCastingMode: 0
   grassMaterial: {fileID: 2100000, guid: 4340af0305acd654d835caa4b209fd41, type: 2}
   useFlatteners: 1
