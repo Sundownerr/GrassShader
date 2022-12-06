@@ -40,7 +40,7 @@ public class GrassShaper : MonoBehaviour
         {
             counter++;
 
-            if (Physics.Raycast(currentSpot + Vector3.up * raycastHeight, Vector3.down, out var hit, 30f,
+            if (Physics.Raycast(currentSpot + Vector3.up * raycastHeight, Vector3.down, out var hit, 1000f,
                 grassPlacementLayer))
             {
                 hits += 1;

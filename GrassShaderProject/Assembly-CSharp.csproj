@@ -41,15 +41,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GrassGPUInstancing.cs" />
-     <Compile Include="Assets\moveScript.cs" />
      <Compile Include="Assets\Scripts\GrassShaper.cs" />
+     <Compile Include="Assets\Scripts\GrassGPUInstancing.cs" />
      <Folder Include="Assets" />
-     <Folder Include="Assets\Blender\Grass" />
+     <Folder Include="Assets\Models\Grass" />
      <Folder Include="Assets\Scripts" />
      <Folder Include="Assets\Scenes" />
-     <Folder Include="Assets\Blender" />
-     <None Include="Assets\Blender\Grass\Grass.shader" />
+     <Folder Include="Assets\Models" />
+     <None Include="Assets\Models\Grass\Grass.shader" />
      <Reference Include="UnityEngine">
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
@@ -669,25 +668,46 @@
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
      </Reference>
      <Reference Include="Unity.VSCode.Editor">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.TextMeshPro.Editor">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.VisualStudio.Editor">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
      </Reference>
      <Reference Include="Unity.TextMeshPro">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
      </Reference>
      <Reference Include="UnityEditor.UI">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Rider.Editor">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
      </Reference>
      <Reference Include="UnityEngine.UI">
-     <HintPath>G:\Downloads\GrassShader-master (1)\GrassShader-master\GrassShaderProject\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+     </Reference>
+     <Reference Include="com.unity.cinemachine.editor">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Cinemachine">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Cinemachine.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Recorder">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Timeline">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Recorder.Editor">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Recorder.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Recorder.Base">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Recorder.Base.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Timeline.Editor">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
      </Reference>
   </ItemGroup>
   <ItemGroup>

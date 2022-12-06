@@ -9,11 +9,13 @@ public class GrassGPUInstancing : MonoBehaviour
     private Mesh grassMesh;
     [SerializeField] private Vector3 meshSize;
     [SerializeField] private float randomPositionOffset;
+    [SerializeField] private Vector3 positionOffset;
     [SerializeField] private ShadowCastingMode shadowCastingMode;
     [SerializeField] private Material grassMaterial;
     [Space(3)] [Header("Flatteners settings")] [Space] [SerializeField]
     private bool useFlatteners;
     [SerializeField] private float flattenDistance;
+    [SerializeField] private float bendForce;
     [SerializeField] private Collider[] grassFlatteners = new Collider[20];
     [Space(2)] [Header("Cutters settings")] [Space] [SerializeField]
     private bool useCutters;
@@ -60,7 +62,7 @@ public class GrassGPUInstancing : MonoBehaviour
             var randomOffset = Random.insideUnitSphere * randomPositionOffset;
             randomOffset.y = 0;
 
-            _matrix.SetTRS(grassPositions[i] + randomOffset, Quaternion.identity, meshSize);
+            _matrix.SetTRS(grassPositions[i] + randomOffset + positionOffset, Quaternion.identity, meshSize);
 
             _matrixArrays[thousands][subIndex] = _matrix;
 
@@ -120,6 +122,8 @@ public class GrassGPUInstancing : MonoBehaviour
 
     public void UpdateGrassPositions(IReadOnlyList<Vector3> positions)
     {
+        grassPositions = new Vector3[positions.Count];
+        
         for (var i = 0; i < positions.Count; i++)
         {
             grassPositions[i] = positions[i];
@@ -221,15 +225,16 @@ public class GrassGPUInstancing : MonoBehaviour
             var xDistance = column.x - position.x;
             var yDistance = column.y - position.y;
             var zDistance = column.z - position.z;
-            var abc = new Vector3(xDistance, yDistance, zDistance);
-
-            var bend = abc.normalized * Mathf.Clamp(1f / abc.sqrMagnitude, 0, 1);
 
             var lerpTarget = Vector4.zero;
-            Vector4 lerped;
 
-            if (xDistance * xDistance + yDistance * yDistance + zDistance * zDistance < flattenDistance)
+            var distance = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
+
+            if (distance < flattenDistance)
             {
+                var abc = new Vector2(xDistance, zDistance).normalized * bendForce;
+                var bend = abc * Mathf.Clamp(1f / abc.sqrMagnitude, 0, 1);
+
                 // Lay down
                 Vector2 currentDirection;
 
@@ -242,7 +247,7 @@ public class GrassGPUInstancing : MonoBehaviour
                     lerpTarget.z = bend.y;
 
                     var lerpSpeed = Time.deltaTime * 10f;
-                    lerped = Vector4.Lerp(_collisionBendings[thousands][subindex], lerpTarget, lerpSpeed);
+                    var lerped = Vector4.Lerp(_collisionBendings[thousands][subindex], lerpTarget, lerpSpeed);
 
                     // Apply changes
                     _collisionBendings[thousands][subindex].x = lerped.x;
@@ -256,7 +261,7 @@ public class GrassGPUInstancing : MonoBehaviour
                     lerpTarget.z = newVec.y;
 
                     var lerpSpeed = Time.deltaTime * 10f;
-                    lerped = Vector4.Lerp(_collisionBendings[thousands][subindex], lerpTarget, lerpSpeed);
+                    var lerped = Vector4.Lerp(_collisionBendings[thousands][subindex], lerpTarget, lerpSpeed);
 
                     // Apply changes
                     _collisionBendings[thousands][subindex].x = lerped.x;
@@ -267,7 +272,7 @@ public class GrassGPUInstancing : MonoBehaviour
             {
                 // Raise
                 var lerpSpeed = Time.deltaTime * .12f;
-                lerped = Vector4.Lerp(_collisionBendings[thousands][subindex], lerpTarget, lerpSpeed);
+                var lerped = Vector4.Lerp(_collisionBendings[thousands][subindex], lerpTarget, lerpSpeed);
 
                 // Apply changes
                 _collisionBendings[thousands][subindex].x = lerped.x;
