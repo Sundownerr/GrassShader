@@ -1,91 +1,71 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
-public class GrassShaper : MonoBehaviour {
-
-    
-    public Mesh mesh;
-    public bool updateGrass = false;
-    public LayerMask grassShaperLayer;
-    public LayerMask grassPlacementLayer;
-    public GrassGPUInstancing targetGrassSpawner;
+public class GrassShaper : MonoBehaviour
+{
+    [SerializeField] private LayerMask grassPlacementLayer;
+    [SerializeField] private float raycastHeight = 5f;
+    [SerializeField] private float step;
+    [SerializeField] private GrassGPUInstancing targetGrassSpawner;
+    [SerializeField] private MeshRenderer meshRenderer;
     private List<Vector3> newSpots;
-    public float raycastHeight = 5f;
 
-
-
-    void Update () {
-        mesh = GetComponent<MeshFilter>().sharedMesh;
-        if (updateGrass)
-        {
-            updateBoundingBox();
-            updateGrassPoints();
-            updateGrass = false;
-        }
-    }
-
-    void updateBoundingBox()
+    private void OnDrawGizmosSelected()
     {
-        mesh.RecalculateBounds();
-    }
-
-
-    void OnDrawGizmosSelected()
-    {
+        var bounds = meshRenderer.bounds;
+        
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + mesh.bounds.center, mesh.bounds.size);
+        Gizmos.DrawWireCube(bounds.center, bounds.size);
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(bounds.min, bounds.max);
     }
 
-
-    void updateGrassPoints ()
+    [ContextMenu("UPDATE GRASS POINTS")]
+    private void UpdateGrass()
     {
-        Vector3 startSpot = transform.position + mesh.bounds.min;
-        Vector3 currentSpot = transform.position + mesh.bounds.min;
-        Vector3 endSpot = transform.position + mesh.bounds.max;
-        int counter = 0;
-        RaycastHit hit;
+        var bounds = meshRenderer.bounds;
+        var startSpot = bounds.min;
+        var endSpot = bounds.max;
+        var currentSpot = startSpot;
+        var counter = 0;
 
+        Debug.DrawLine(startSpot, startSpot + Vector3.up * 7, Color.blue, 1f);
+        Debug.DrawLine(endSpot, endSpot + Vector3.up * 7, Color.yellow, 1f);
 
-        Debug.DrawLine(startSpot, startSpot + Vector3.up * 7, Color.blue);
-        Debug.DrawLine(endSpot, endSpot + Vector3.up * 7, Color.yellow);
-
-        int hits = 0;
+        var hits = 0;
         newSpots = new List<Vector3>();
 
         while (counter < 100000 && (currentSpot.x < endSpot.x || currentSpot.z < endSpot.z))
         {
             counter++;
 
-            if (Physics.Raycast(currentSpot + Vector3.up * raycastHeight, Vector3.down, 30f, grassShaperLayer))
+            if (Physics.Raycast(currentSpot + Vector3.up * raycastHeight, Vector3.down, out var hit, 30f,
+                grassPlacementLayer))
             {
-                if (Physics.Raycast(currentSpot + Vector3.up * raycastHeight, Vector3.down, out hit, 30f, grassPlacementLayer))
-                {
-                    hits += 1;
-                    Debug.DrawLine(hit.point, hit.point + Vector3.up * 3);
-                    newSpots.Add(hit.point);
-                }
+                hits += 1;
+                newSpots.Add(hit.point);
+
+                Debug.DrawLine(hit.point, hit.point + Vector3.up * 3, Color.cyan, 1f);
             }
 
-            currentSpot += Vector3.forward * 0.8f;
-            if(currentSpot.z > endSpot.z && currentSpot.x < endSpot.x)
+            currentSpot += Vector3.forward * step;
+
+            if (currentSpot.z > endSpot.z && currentSpot.x < endSpot.x)
             {
                 currentSpot.z = startSpot.z;
-                currentSpot += Vector3.right * 0.8f;
+                currentSpot += Vector3.right * step;
             }
         }
-        Debug.Log("counter : " + counter + " hits: " + hits);
-
-                                       
-        targetGrassSpawner.grassPositions = new Vector3[hits];
+        
+        Debug.Log($"{counter} scans, {hits} grass points ");
         Debug.Log("assigning new array size:" + targetGrassSpawner.grassPositions.Length);
-        for (int i = 0; i < hits; i++)
+        
+        targetGrassSpawner.grassPositions = new Vector3[hits];
+        
+        for (var i = 0; i < hits; i++)
         {
             targetGrassSpawner.grassPositions[i] = newSpots[i];
         }
-
-        targetGrassSpawner.updateHitBox(transform.position + mesh.bounds.center, mesh.bounds.extents);
     }
 }
-
