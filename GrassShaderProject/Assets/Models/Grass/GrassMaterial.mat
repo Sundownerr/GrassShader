@@ -117,7 +117,7 @@ Material:
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
-    - _Amount: 1
+    - _Amount: 0.171
     - _Anisotropy: 0
     - _BlendMode: 0
     - _CoatMask: 0
@@ -162,7 +162,7 @@ Material:
     - _EnableSpecularOcclusion: 0
     - _EnergyConservingSpecularColor: 1
     - _HdrpVersion: 2
-    - _Height: 0.468
+    - _Height: 1.673
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -247,7 +247,7 @@ Material:
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _TintColor1: {r: 0.15205589, g: 0.4811321, b: 0.16380864, a: 1}
-    - _TintColor2: {r: 0.6035936, g: 1, b: 0.48584908, a: 1}
+    - _TintColor2: {r: 0.43171653, g: 0.879, b: 0.29885998, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}

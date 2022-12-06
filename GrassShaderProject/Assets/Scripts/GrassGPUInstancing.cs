@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -19,7 +20,8 @@ public class GrassGPUInstancing : MonoBehaviour
     [SerializeField] private Collider[] grassFlatteners = new Collider[20];
     [Space(2)] [Header("Cutters settings")] [Space] [SerializeField]
     private bool useCutters;
-    [SerializeField] private float growSpeed;
+    [SerializeField] private Vector2 growSpeedRange;
+    [SerializeField] private float growDelay;
     [SerializeField] private float cutDistance;
     [SerializeField] private Collider[] grassCutters = new Collider[5];
     [Space] [SerializeField] private Vector3[] grassPositions;
@@ -104,12 +106,6 @@ public class GrassGPUInstancing : MonoBehaviour
             {
                 Cut(thousands, subIndex, column);
             }
-
-            // regrow Grass 
-            if (_collisionBendings[thousands][subIndex].y < 1f)
-            {
-                _collisionBendings[thousands][subIndex].y += growSpeed * Time.deltaTime;
-            }
         }
 
         if (_cutAmount > 0 && cutParticleSystem != null)
@@ -123,7 +119,7 @@ public class GrassGPUInstancing : MonoBehaviour
     public void UpdateGrassPositions(IReadOnlyList<Vector3> positions)
     {
         grassPositions = new Vector3[positions.Count];
-        
+
         for (var i = 0; i < positions.Count; i++)
         {
             grassPositions[i] = positions[i];
@@ -207,14 +203,25 @@ public class GrassGPUInstancing : MonoBehaviour
 
             if (abc.sqrMagnitude < cutDistance && _collisionBendings[thousands][subindex].y > 0.4f)
             {
-                // Cut the Grass:
-                // column.y = 0.2f;
-                _collisionBendings[thousands][subindex].y = .2f;
+                _collisionBendings[thousands][subindex].y = .0f;
 
                 var cutPos = column;
                 cutPos.y = position.y;
                 _cutPositions[_cutAmount++] = cutPos;
+                var growSpeed = Random.Range(growSpeedRange.x, growSpeedRange.y);
+                StartCoroutine(Regrow(growDelay, growSpeed, thousands, subindex));
             }
+        }
+    }
+
+    private IEnumerator Regrow(float delay, float speed, int thousands, int subIndex)
+    {
+        yield return new WaitForSeconds(delay);
+
+        while (_collisionBendings[thousands][subIndex].y < 1)
+        {
+            _collisionBendings[thousands][subIndex].y += speed * Time.deltaTime;
+            yield return null;
         }
     }
 

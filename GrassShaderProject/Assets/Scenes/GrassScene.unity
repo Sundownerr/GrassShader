@@ -400,7 +400,7 @@ ParticleSystemRenderer:
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
   m_VertexStreams: 00010304
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4134353514570314643, guid: d319104a197ba554da46bd15e4291691, type: 3}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -598,8 +598,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.2846989, g: 0.638, b: 0.11662366, a: 1}
-      maxColor: {r: 0.45098042, g: 0.8196079, b: 0.37647063, a: 1}
+      minColor: {r: 0.22903353, g: 0.5188679, b: 0.090557136, a: 1}
+      maxColor: {r: 0.23426117, g: 0.6226415, b: 0.15566038, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -661,7 +661,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -714,7 +714,7 @@ ParticleSystem:
     startSizeY:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -767,7 +767,7 @@ ParticleSystem:
     startSizeZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -1038,12 +1038,12 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 25
+    angle: 27.35
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
-    m_Position: {x: 0, y: 0, z: 0}
+    m_Position: {x: 0, y: -1, z: 0}
     m_Rotation: {x: -90, y: 0, z: 0}
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
@@ -1124,7 +1124,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.47
+      value: 0.0001
       mode: 0
       spread: 0
       speed:
@@ -1353,7 +1353,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 3
+        scalar: 2
         minScalar: 1
         maxCurve:
           serializedVersion: 2
@@ -1418,21 +1418,39 @@ ParticleSystem:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: -1
-          outSlope: -1
+          value: 0
+          inSlope: 46.01563
+          outSlope: 46.01563
           tangentMode: 34
           weightedMode: 0
           inWeight: 0
-          outWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.01944393
+          value: 0.8947246
+          inSlope: 1.0482782
+          outSlope: 1.0482782
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.53947616
+        - serializedVersion: 3
+          time: 0.43894094
+          value: 0.71901333
+          inSlope: -0.8501953
+          outSlope: -0.8501953
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: -1
-          outSlope: -1
+          inSlope: -1.2815288
+          outSlope: -1.2815288
           tangentMode: 34
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.33333334
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -5786,11 +5804,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ddb4c3bcedd8e4ca67fd859a0762b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
-  meshSize: {x: 0.5, y: 2, z: 0.5}
+  grassMesh: {fileID: 4134353514570314643, guid: d319104a197ba554da46bd15e4291691,
+    type: 3}
+  meshSize: {x: 3, y: 2, z: 3}
   randomPositionOffset: 0.18
-  positionOffset: {x: 0, y: 0.5, z: 0}
-  shadowCastingMode: 1
+  positionOffset: {x: 0, y: -0.1, z: 0}
+  shadowCastingMode: 0
   grassMaterial: {fileID: 2100000, guid: 4340af0305acd654d835caa4b209fd41, type: 2}
   useFlatteners: 1
   flattenDistance: 17
@@ -5799,7 +5818,8 @@ MonoBehaviour:
   - {fileID: 494582392}
   - {fileID: 404609129}
   useCutters: 1
-  growSpeed: 0.1
+  growSpeedRange: {x: 0.1, y: 1}
+  growDelay: 3
   cutDistance: 13
   grassCutters:
   - {fileID: 404609129}
@@ -10202,8 +10222,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8296172669410885564}
   m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
