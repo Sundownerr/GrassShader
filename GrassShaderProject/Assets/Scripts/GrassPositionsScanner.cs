@@ -7,7 +7,6 @@ namespace Grass
     {
         [SerializeField] private LayerMask _scanLayer;
         [SerializeField] private Collider _scanBox;
-        // [SerializeField] private float _raycastHeight = 5f;
         [SerializeField] private float _scanStep;
         [SerializeField] private Collider[] _collidersToScan;
         [SerializeField] private List<Vector3> _positions;
@@ -31,8 +30,8 @@ namespace Grass
             Gizmos.DrawLine(bounds.min, bounds.max);
         }
 
-        [ContextMenu("UPDATE GRASS POINTS")]
-        private void UpdateGrass()
+        [ContextMenu("SCAN")]
+        private void Scan()
         {
             var bounds = _scanBox.bounds;
             var startSpot = bounds.min;
@@ -78,6 +77,8 @@ namespace Grass
 
 #if UNITY_EDITOR
             Debug.Log($"[{nameof(GrassPositionsScanner)}] {counter} scans, {hits} grass points ");
+            
+            UnityEditor.EditorUtility.SetDirty(this);
 #endif
         }
     }
