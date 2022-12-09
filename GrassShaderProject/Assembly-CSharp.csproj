@@ -41,14 +41,18 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GrassShaper.cs" />
      <Compile Include="Assets\Scripts\GrassGPUInstancing.cs" />
+     <Compile Include="Assets\Scripts\FPSLock.cs" />
+     <Compile Include="Assets\Scripts\GrassPositionsScanner.cs" />
+     <Compile Include="Assets\Scripts\GrassFlattener.cs" />
+     <Compile Include="Assets\Scripts\GrassCutter.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets\Models\Grass" />
      <Folder Include="Assets\Scripts" />
      <Folder Include="Assets\Scenes" />
+     <Folder Include="Assets\Materials" />
      <Folder Include="Assets\Models" />
-     <None Include="Assets\Models\Grass\Grass.shader" />
+     <None Include="Assets\Materials\Grass.shader" />
      <Reference Include="UnityEngine">
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
      </Reference>
@@ -294,6 +298,21 @@
      </Reference>
      <Reference Include="UnityEditor.UnityConnectModule">
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Burst.Unsafe">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.Unsafe.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Burst.Cecil.Mdb">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Burst.Cecil.Pdb">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Burst.Cecil">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Burst.Cecil.Rocks">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Android.Types">
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
@@ -676,6 +695,9 @@
      <Reference Include="Unity.VSCode.Editor">
      <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.Burst">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
+     </Reference>
      <Reference Include="com.unity.cinemachine.editor">
      <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
      </Reference>
@@ -697,6 +719,12 @@
      <Reference Include="Unity.TextMeshPro">
      <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
      </Reference>
+     <Reference Include="Unity.Burst.Editor">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Mathematics.Editor">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+     </Reference>
      <Reference Include="UnityEditor.UI">
      <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
      </Reference>
@@ -708,6 +736,9 @@
      </Reference>
      <Reference Include="Unity.Recorder">
      <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
+     </Reference>
+     <Reference Include="Unity.Mathematics">
+     <HintPath>F:\UnityProject\GrassShader\GrassShaderProject\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
      </Reference>
   </ItemGroup>
   <ItemGroup>

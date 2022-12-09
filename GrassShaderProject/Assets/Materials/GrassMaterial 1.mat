@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GrassMaterial
+  m_Name: GrassMaterial 1
   m_Shader: {fileID: 4800000, guid: 6d1fdda1fb38c604b9c4e1785cd33261, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -121,7 +121,7 @@ Material:
     - _Anisotropy: 0
     - _BlendMode: 0
     - _CoatMask: 0
-    - _ColorHeight: 0.708
+    - _ColorHeight: 1
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
@@ -162,7 +162,7 @@ Material:
     - _EnableSpecularOcclusion: 0
     - _EnergyConservingSpecularColor: 1
     - _HdrpVersion: 2
-    - _Height: 1.673
+    - _Height: 1.463
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0
@@ -246,8 +246,8 @@ Material:
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _TintColor1: {r: 0.15205589, g: 0.4811321, b: 0.16380864, a: 1}
-    - _TintColor2: {r: 0.43171653, g: 0.879, b: 0.29885998, a: 1}
+    - _TintColor1: {r: 0.6415094, g: 0.48685712, b: 0, a: 1}
+    - _TintColor2: {r: 1, g: 0.66818184, b: 0, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
