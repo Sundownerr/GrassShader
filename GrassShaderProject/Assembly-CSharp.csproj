@@ -46,9 +46,10 @@
      <Compile Include="Assets\Scripts\GrassPositionsScanner.cs" />
      <Compile Include="Assets\Scripts\GrassFlattener.cs" />
      <Compile Include="Assets\Scripts\GrassCutter.cs" />
+     <Compile Include="Assets\Scripts\CutParticle.cs" />
      <Folder Include="Assets" />
-     <Folder Include="Assets\Models\Grass" />
      <Folder Include="Assets\Scripts" />
+     <Folder Include="Assets\Animations" />
      <Folder Include="Assets\Scenes" />
      <Folder Include="Assets\Materials" />
      <Folder Include="Assets\Models" />

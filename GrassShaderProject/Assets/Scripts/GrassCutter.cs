@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
-public class GrassCutter : MonoBehaviour
+namespace Grass
 {
-    [SerializeField] private float cutDistance;
+    public class GrassCutter : MonoBehaviour
+    {
+        [SerializeField] private float cutDistance;
 
-    public float CutDistance => cutDistance;
+        public float CutDistance => cutDistance;
+    }
 }

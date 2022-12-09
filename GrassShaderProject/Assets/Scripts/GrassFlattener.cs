@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-public class GrassFlattener  : MonoBehaviour
+namespace Grass
 {
-    [SerializeField] private float flattenDistance;
-    [SerializeField] private float bendForce;
+    public class GrassFlattener : MonoBehaviour
+    {
+        [SerializeField] private float flattenDistance;
+        [SerializeField] private float bendForce;
 
-    public float FlattenDistance => flattenDistance;
-    public float BendForce => bendForce;
+        public float FlattenDistance => flattenDistance;
+        public float BendForce => bendForce;
+    }
 }

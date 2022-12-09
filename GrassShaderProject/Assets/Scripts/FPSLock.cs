@@ -3,11 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FPSLock : MonoBehaviour
+namespace Grass
 {
-   [SerializeField] private int _targetFPS;
-   private void Awake()
+   public class FPSLock : MonoBehaviour
    {
-      Application.targetFrameRate = _targetFPS;
+      [SerializeField] private int _targetFPS;
+
+      private void Awake()
+      {
+         Application.targetFrameRate = _targetFPS;
+      }
    }
 }
