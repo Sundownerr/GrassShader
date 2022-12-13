@@ -41,18 +41,21 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GrassGPUInstancing.cs" />
+     <Compile Include="Assets\Scripts\Grass\GrassGPUInstancing.cs" />
      <Compile Include="Assets\Scripts\FPSLock.cs" />
-     <Compile Include="Assets\Scripts\GrassCutter.cs" />
-     <Compile Include="Assets\Scripts\GrassPositionsScanner.cs" />
-     <Compile Include="Assets\Scripts\GrassFlattener.cs" />
-     <Compile Include="Assets\Scripts\CutParticle.cs" />
-     <Compile Include="Assets\Scripts\PointerGrassCutter.cs" />
-     <Compile Include="Assets\Scripts\PointerGrassFlattener.cs" />
+     <Compile Include="Assets\Scripts\Grass\GrassCutter.cs" />
+     <Compile Include="Assets\Scripts\Grass\GrassPositionsScanner.cs" />
+     <Compile Include="Assets\Scripts\Grass\GrassFlattener.cs" />
+     <Compile Include="Assets\Scripts\Grass\CutParticle.cs" />
+     <Compile Include="Assets\Scripts\Example\PointerGrassCutter.cs" />
+     <Compile Include="Assets\Scripts\Example\PointerGrassFlattener.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets\Scripts" />
+     <Folder Include="Assets\Prefabs" />
+     <Folder Include="Assets\Scripts\Grass" />
      <Folder Include="Assets\Animations" />
      <Folder Include="Assets\Scenes" />
+     <Folder Include="Assets\Scripts\Example" />
      <Folder Include="Assets\Materials" />
      <Folder Include="Assets\Models" />
      <None Include="Assets\Materials\Grass.shader" />
