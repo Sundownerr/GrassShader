@@ -43,10 +43,12 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\GrassGPUInstancing.cs" />
      <Compile Include="Assets\Scripts\FPSLock.cs" />
+     <Compile Include="Assets\Scripts\GrassCutter.cs" />
      <Compile Include="Assets\Scripts\GrassPositionsScanner.cs" />
      <Compile Include="Assets\Scripts\GrassFlattener.cs" />
-     <Compile Include="Assets\Scripts\GrassCutter.cs" />
      <Compile Include="Assets\Scripts\CutParticle.cs" />
+     <Compile Include="Assets\Scripts\PointerGrassCutter.cs" />
+     <Compile Include="Assets\Scripts\PointerGrassFlattener.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets\Scripts" />
      <Folder Include="Assets\Animations" />

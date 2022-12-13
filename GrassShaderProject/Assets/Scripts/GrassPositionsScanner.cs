@@ -6,63 +6,55 @@ namespace Grass
     public class GrassPositionsScanner : MonoBehaviour
     {
         [SerializeField] private LayerMask _scanLayer;
-        [SerializeField] private Collider _scanBox;
-        [SerializeField] private float _scanStep;
+        [SerializeField] private float _scanStep = 0.3f;
         [SerializeField] private Collider[] _collidersToScan;
-        [SerializeField] private List<Vector3> _positions;
-        public IReadOnlyList<Vector3> Positions => _positions;
+        private readonly RaycastHit[] _hits = new RaycastHit[1];
+        private readonly List<Vector3> _positions = new();
 
         private void OnDrawGizmosSelected()
         {
-            if (_scanBox == null)
-            {
-                return;
-            }
-
-            var bounds = _scanBox.bounds;
-
             var color = Color.cyan;
-            color.a -= 0.9f;
+            color.a -= 0.7f;
             Gizmos.color = color;
-            Gizmos.DrawCube(bounds.center, bounds.size * 0.97f);
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(bounds.min, bounds.max);
+            foreach (var grassCollider in _collidersToScan)
+            {
+                var bounds = grassCollider.bounds;
+                Gizmos.DrawWireCube(bounds.center, bounds.size);
+                Gizmos.DrawCube(bounds.center, bounds.size * 0.99f);
+                Gizmos.DrawLine(bounds.min, bounds.max);
+            }
         }
 
-        [ContextMenu("SCAN")]
-        private void Scan()
+        public IReadOnlyList<Vector3> Positions()
         {
-            var bounds = _scanBox.bounds;
+            if (_positions.Count == 0)
+            {
+                Scan();
+            }
+
+            return _positions;
+        }
+
+        private void Scan(Collider grassCollider)
+        {
+            var bounds = grassCollider.bounds;
             var startSpot = bounds.min;
             var endSpot = bounds.max;
             var currentSpot = startSpot;
             var counter = 0;
-            var height = bounds.max.y - bounds.min.y;
-
-            var hits = 0;
-            _positions.Clear();
+            var height = bounds.size.y * 2f;
 
             while (counter < 100000 && (currentSpot.x < endSpot.x || currentSpot.z < endSpot.z))
             {
                 counter++;
-
                 var rayOrigin = currentSpot + Vector3.up * height;
 
-
-                if (Physics.Raycast(rayOrigin, Vector3.down, out var hit, 1000f, _scanLayer))
+                if (Physics.RaycastNonAlloc(rayOrigin, Vector3.down, _hits, 1000f, _scanLayer) > 0)
                 {
-                    for (var i = 0; i < _collidersToScan.Length; i++)
+                    if (_hits[0].collider == grassCollider)
                     {
-                        if (hit.collider != _collidersToScan[i])
-                        {
-                            continue;
-                        }
-
-                        hits += 1;
-                        _positions.Add(hit.point);
-
-                        break;
+                        _positions.Add(_hits[0].point);
                     }
                 }
 
@@ -74,12 +66,26 @@ namespace Grass
                     currentSpot += Vector3.right * _scanStep;
                 }
             }
-
-#if UNITY_EDITOR
-            Debug.Log($"[{nameof(GrassPositionsScanner)}] {counter} scans, {hits} grass points ");
-            
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
         }
+
+        public void Scan()
+        {
+            _positions.Clear();
+
+            foreach (var grassCollider in _collidersToScan)
+            {
+                Scan(grassCollider);
+            }
+        }
+#if UNITY_EDITOR
+        [ContextMenu("Visualize Positions")]
+        private void VisualizePositions()
+        {
+            foreach (var position in _positions)
+            {
+                Debug.DrawRay(position, Vector3.up, Color.cyan, 1f);
+            }
+        }
+#endif
     }
 }

@@ -11,25 +11,26 @@ namespace Grass
         private static readonly int TintColor1 = Shader.PropertyToID("_TintColor1");
         private static readonly int TintColor2 = Shader.PropertyToID("_TintColor2");
 
+        [SerializeField] public bool _update;
         [Space(2)] [SerializeField] private GrassPositionsScanner grassPositionsScanner;
 
         [Space(3)] [Header("- GRASS  SETTINGS -")] [SerializeField]
         private Mesh grassMesh;
-        [SerializeField] private Material _grassShaderMaterial;
-        [SerializeField] private ShadowCastingMode _shadowCastingMode;
-        [SerializeField] private Vector3 _meshSize;
-        [SerializeField] private Vector3 _spawnPositionOffset;
-        [SerializeField] private float _randomSpawnPositionOffset;
+        [SerializeField] public Material _grassShaderMaterial;
+        [SerializeField] public ShadowCastingMode _shadowCastingMode;
+        [SerializeField] public Vector3 _meshSize = Vector3.one;
+        [SerializeField] public Vector3 _spawnPositionOffset;
+        [SerializeField] public float _randomSpawnPositionOffset = 0.18f;
 
         [Space(3)] [Header("- FLATTEN  SETTINGS -")] [SerializeField]
-        private GrassFlattener[] _grassFlatteners;
-        [SerializeField] private float _flattenSpeed;
-        [SerializeField] private float _raiseSpeed;
+        private List<GrassFlattener> _grassFlatteners;
+        [SerializeField] public float _flattenSpeed = 4;
+        [SerializeField] public float _raiseSpeed = 0.8f;
 
         [Space(3)] [Header("- CUT  SETTINGS -")] [SerializeField]
-        private GrassCutter[] _grassCutters;
-        [SerializeField] private Vector2 _growSpeedRange;
-        [SerializeField] private Vector2 _growDelayRange;
+        private List<GrassCutter> _grassCutters;
+        [SerializeField] public Vector2 _growSpeedRange = new(0.1f, 1);
+        [SerializeField] public Vector2 _growDelayRange = new(2, 3);
 
         [Space(3)] [Header("- PARTICLE  SETTINGS -")] [SerializeField]
         private CutParticle[] _cutParticles;
@@ -39,7 +40,7 @@ namespace Grass
         private Vector4[][] _grassBendings;
         private MaterialPropertyBlock _grassMaterialPropertyBlock;
         private Matrix4x4[][] _grassMatrix;
-        private IReadOnlyList<Vector3> _scannedGrassPositions => grassPositionsScanner.Positions;
+        private IReadOnlyList<Vector3> _scannedGrassPositions => grassPositionsScanner.Positions();
 
         private void Start()
         {
@@ -59,6 +60,11 @@ namespace Grass
 
         private void Update()
         {
+            if (!_update)
+            {
+                return;
+            }
+
             var thousands = 0;
 
             UpdateCuttersPositions();
@@ -79,18 +85,38 @@ namespace Grass
 
                 var column = _grassMatrix[thousands][subIndex].GetColumn(3);
 
-                if (_grassFlatteners.Length > 0)
+                if (_grassFlatteners.Count > 0)
                 {
                     Flatten(thousands, subIndex, column, deltaTime, zero);
                 }
 
-                if (_grassCutters.Length > 0)
+                if (_grassCutters.Count > 0)
                 {
                     Cut(thousands, subIndex, column);
                 }
             }
 
             DrawGrassMeshes();
+        }
+
+        public void AddGrassCutter(GrassCutter grassCutter)
+        {
+            _grassCutters.Add(grassCutter);
+        }
+
+        public void AddGrassFlattener(GrassFlattener grassFlattener)
+        {
+            _grassFlatteners.Add(grassFlattener);
+        }
+
+        public void RemoveGrassCutter(GrassCutter grassCutter)
+        {
+            _grassCutters.Remove(grassCutter);
+        }
+
+        public void RemoveGrassFlattener(GrassFlattener grassFlattener)
+        {
+            _grassFlatteners.Remove(grassFlattener);
         }
 
         private void FillGrassMatrix()
@@ -147,12 +173,12 @@ namespace Grass
 
         private void UpdateFlattenersPositions()
         {
-            if (_flattenerPositions.Length != _grassFlatteners.Length)
+            if (_flattenerPositions.Length != _grassFlatteners.Count)
             {
-                _flattenerPositions = new Vector3[_grassFlatteners.Length];
+                _flattenerPositions = new Vector3[_grassFlatteners.Count];
             }
 
-            for (var i = 0; i < _grassFlatteners.Length; i++)
+            for (var i = 0; i < _grassFlatteners.Count; i++)
             {
                 _flattenerPositions[i] = _grassFlatteners[i].transform.position;
             }
@@ -160,12 +186,12 @@ namespace Grass
 
         private void UpdateCuttersPositions()
         {
-            if (_cutterPositions.Length != _grassCutters.Length)
+            if (_cutterPositions.Length != _grassCutters.Count)
             {
-                _cutterPositions = new Vector3[_grassCutters.Length];
+                _cutterPositions = new Vector3[_grassCutters.Count];
             }
 
-            for (var i = 0; i < _grassCutters.Length; i++)
+            for (var i = 0; i < _grassCutters.Count; i++)
             {
                 _cutterPositions[i] = _grassCutters[i].transform.position;
             }
@@ -205,7 +231,11 @@ namespace Grass
 
         private IEnumerator Regrow(float delay, float speed, int thousands, int subIndex)
         {
-            yield return new WaitForSeconds(delay);
+            while (delay > 0)
+            {
+                delay -= Time.deltaTime;
+                yield return null;
+            }
 
             while (_grassBendings[thousands][subIndex].y < 1)
             {
