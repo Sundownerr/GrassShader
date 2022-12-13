@@ -17,26 +17,3 @@ Cutting grass works by shrinking it to 0.1f height and emitting particles at the
 
 Look at complete setup in `GrassScene`.
 
-
-1. Create `GrassPlacement` layer
-
-2. Create `Grass Ground` gameobject with any collider and assign a `GrassPlacement` layer
-
-3. Create `Scan Box` gameobject and add `GrassPositionScanner` script and Box Collider
-
-4. Adjust `Scan Box` position and size until it overlaps `Grass Ground`. Enable scene gizmos to make it easier
-
-4. Adjust `GrassPositionScanner` settings:
-   - assign `Scan Box`
-   - assign `Grass Ground`
-
-5. Right click on `GrassPositionScanner` and choose `SCAN` - the script will scan `Grass Ground` for grass positions
-
-6. Create `Grass Spawner` gameobject and add `GrassGPUInstancing` script
-
-6. Adjust `GrassGPUInstancing` settings:
-   - Create `Grass Cutter` gameObject and add `Grass Cutter` script, then assign it to `GrassGPUInstancing`
-   - Create `Grass Flattener` gameObject and add `Grass Flattener` script , then assign it to `GrassGPUInstancing`
-   - Create `Cut Particle` gameObject and add `Partcle System` and `Grass Flattener` script , then assign it to `GrassGPUInstancing`
-   
-7. You are breathtaking!
