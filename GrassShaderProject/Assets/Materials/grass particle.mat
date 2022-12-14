@@ -9,7 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: grass particle
   m_Shader: {fileID: 211, guid: 0000000000000000f000000000000000, type: 0}
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _COLORCOLOR_ON
   m_InvalidKeywords:
   - _GLOSSYREFLECTIONS_OFF
   - _SPECULARHIGHLIGHTS_OFF
@@ -66,7 +67,7 @@ Material:
     - _CameraFadingEnabled: 0
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
-    - _ColorMode: 0
+    - _ColorMode: 4
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1

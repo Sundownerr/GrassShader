@@ -4902,5 +4902,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _particleSystem: {fileID: 8676518085628683810}
-  _colorRange: {x: 0.1, y: 0.75}
+  _colorRange: {x: 0.3, y: 0.55}
   _emitCount: 1
