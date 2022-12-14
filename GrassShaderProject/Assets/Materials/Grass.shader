@@ -6,13 +6,11 @@ Shader "Custom/Grass"
 	{
 		_TintColor1("Tint Color 1", Color) = (1,1,1,1)
 		_TintColor2("Tint Color 2", Color) = (1,1,1,1)
-		_ColorHeight("Color Height",  Range(0, 1)) = .3
-		_CutoutThresh("Cutout Threshold", Range(0.0,1.0)) = 0.2
-		_Speed("Speed", Range(0.0,5.0)) = 0.5
-		_Amount("Amount", Range(-1.0,1.0)) = 1
-		_NoiseScale("Noise Scale",  Range(0, .5)) = .1
-		_Height("Grass Height",  Range(0, 2)) = 1
 		_LightIntensity("Light Intensity",  Range(0, 10)) = 1
+		_ColorHeight("Color Height",  Range(0, 10)) = .3
+		_Height("Grass Height",  Range(0, 2)) = 1
+		_NoiseScale("Noise Scale",  Range(0, .5)) = .1
+		_Amount("Amount", Range(-1.0,1.0)) = 1
 	}
 
 		SubShader
@@ -81,10 +79,6 @@ Shader "Custom/Grass"
 
 	float4 _TintColor1;
 	float4 _TintColor2;
-	float _CutoutThresh;
-	float _Distance;
-	float _Amplitude;
-	float _Speed;
 	float _Amount;
 	float _NoiseScale;
 	float _Height;
