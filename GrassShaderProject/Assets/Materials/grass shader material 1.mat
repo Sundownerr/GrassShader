@@ -117,7 +117,7 @@ Material:
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
-    - _Amount: 0.171
+    - _Amount: 0.255
     - _Anisotropy: 0
     - _BlendMode: 0
     - _CoatMask: 0
@@ -125,7 +125,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _CutoutThresh: 0
+    - _CutoutThresh: 0.067
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 1
     - _DetailNormalScale: 1
@@ -176,10 +176,11 @@ Material:
     - _Ior: 1
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
+    - _LightIntensity: 1.12
     - _LinkDetailsWithBase: 1
     - _MaterialID: 1
     - _Metallic: 0
-    - _NoiseScale: 0.133
+    - _NoiseScale: 0.19
     - _NormalMapSpace: 0
     - _NormalScale: 1
     - _PPDLodThreshold: 5
@@ -195,7 +196,7 @@ Material:
     - _SmoothnessRemapMin: 0
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
-    - _Speed: 0
+    - _Speed: 4.41
     - _SrcBlend: 1
     - _StencilRef: 2
     - _StencilRefDepth: 0
@@ -246,8 +247,8 @@ Material:
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _TintColor1: {r: 0, g: 0.4811321, b: 0.017183337, a: 1}
-    - _TintColor2: {r: 0.19722074, g: 0.8584906, b: 0, a: 1}
+    - _TintColor1: {r: 0, g: 0.5283019, b: 0.016406905, a: 1}
+    - _TintColor2: {r: 0.5534884, g: 1, b: 0, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}

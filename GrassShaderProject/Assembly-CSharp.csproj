@@ -41,14 +41,14 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Example\PointerGrassCutter.cs" />
      <Compile Include="Assets\Scripts\Grass\GrassGPUInstancing.cs" />
      <Compile Include="Assets\Scripts\FPSLock.cs" />
      <Compile Include="Assets\Scripts\Grass\GrassCutter.cs" />
+     <Compile Include="Assets\Scripts\Example\PointerGrassFlattener.cs" />
      <Compile Include="Assets\Scripts\Grass\GrassPositionsScanner.cs" />
      <Compile Include="Assets\Scripts\Grass\GrassFlattener.cs" />
      <Compile Include="Assets\Scripts\Grass\CutParticle.cs" />
-     <Compile Include="Assets\Scripts\Example\PointerGrassCutter.cs" />
-     <Compile Include="Assets\Scripts\Example\PointerGrassFlattener.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets\Scripts" />
      <Folder Include="Assets\Prefabs" />
@@ -58,6 +58,7 @@
      <Folder Include="Assets\Scripts\Example" />
      <Folder Include="Assets\Materials" />
      <Folder Include="Assets\Models" />
+     <Folder Include="Assets\Scenes\GrassScene" />
      <None Include="Assets\Materials\Grass.shader" />
      <Reference Include="UnityEngine">
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
