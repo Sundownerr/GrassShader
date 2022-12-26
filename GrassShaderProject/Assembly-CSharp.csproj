@@ -58,7 +58,6 @@
      <Folder Include="Assets\Scripts\Example" />
      <Folder Include="Assets\Materials" />
      <Folder Include="Assets\Models" />
-     <Folder Include="Assets\Scenes\GrassScene" />
      <None Include="Assets\Materials\Grass.shader" />
      <Reference Include="UnityEngine">
      <HintPath>F:\Unities\2021.3.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -34,25 +33,50 @@ namespace Grass
 
         [Space(3)] [Header("- PARTICLE  SETTINGS -")] [SerializeField]
         private CutParticle[] _cutParticles;
+        private CutterConfig[] _cutterConfigs;
 
         private Vector3[] _cutterPositions = new Vector3[1];
+        private FlattenerConfig[] _flattenerConfigs;
         private Vector3[] _flattenerPositions = new Vector3[1];
         private Vector4[][] _grassBendings;
         private MaterialPropertyBlock _grassMaterialPropertyBlock;
         private Matrix4x4[][] _grassMatrix;
+        private float[][] _grassRegrowths;
+        private float[][] _growDelays;
+        private float[][] _growSpeeds;
         private IReadOnlyList<Vector3> _scannedGrassPositions => grassPositionsScanner.Positions();
 
         private void Start()
         {
             _grassMaterialPropertyBlock = new MaterialPropertyBlock();
+            var subCount = 1000;
+            var count = _scannedGrassPositions.Count / subCount + 1;
 
-            _grassBendings = new Vector4[_scannedGrassPositions.Count / 1000 + 1][];
-            _grassMatrix = new Matrix4x4[_scannedGrassPositions.Count / 1000 + 1][];
+            _grassBendings = new Vector4[count][];
+            _grassMatrix = new Matrix4x4[count][];
+            _growSpeeds = new float[count][];
+            _growDelays = new float[count][];
+            _grassRegrowths = new float[count][];
 
-            for (var i = 0; i < _scannedGrassPositions.Count / 1000 + 1; i++)
+            for (var i = 0; i < count; i++)
             {
-                _grassMatrix[i] = new Matrix4x4[1000];
-                _grassBendings[i] = new Vector4[1000];
+                _grassMatrix[i] = new Matrix4x4[subCount];
+                _grassBendings[i] = new Vector4[subCount];
+                _grassRegrowths[i] = new float[subCount];
+
+                _growSpeeds[i] = new float[subCount];
+
+                for (var j = 0; j < _growSpeeds[i].Length; j++)
+                {
+                    _growSpeeds[i][j] = Random.Range(_growSpeedRange.x, _growSpeedRange.y);
+                }
+
+                _growDelays[i] = new float[subCount];
+
+                for (var j = 0; j < _growDelays[i].Length; j++)
+                {
+                    _growDelays[i][j] = Random.Range(_growDelayRange.x, _growDelayRange.y);
+                }
             }
 
             FillGrassMatrix();
@@ -67,14 +91,15 @@ namespace Grass
 
             var thousands = 0;
 
-            UpdateCuttersPositions();
-            UpdateFlattenersPositions();
+            UpdateCuttersData();
+            UpdateFlattenersData();
 
             var zero = Vector4.zero;
             var deltaTime = Time.deltaTime;
-            var count = _scannedGrassPositions.Count;
+            var grassCount = _scannedGrassPositions.Count;
+            var grassPosition = zero;
 
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i < grassCount; i++)
             {
                 var subIndex = i % 1000;
 
@@ -83,16 +108,113 @@ namespace Grass
                     thousands += 1;
                 }
 
-                var column = _grassMatrix[thousands][subIndex].GetColumn(3);
+                grassPosition.x = _grassMatrix[thousands][subIndex].m03;
+                grassPosition.y = _grassMatrix[thousands][subIndex].m13;
+                grassPosition.z = _grassMatrix[thousands][subIndex].m23;
+                grassPosition.w = _grassMatrix[thousands][subIndex].m33;
 
-                if (_grassFlatteners.Count > 0)
+                // flatten grass
+                for (var j = 0; j < _flattenerPositions.Length; j++)
                 {
-                    Flatten(thousands, subIndex, column, deltaTime, zero);
+                    var xDistance = grassPosition.x - _flattenerPositions[j].x;
+                    var yDistance = grassPosition.y - _flattenerPositions[j].y;
+                    var zDistance = grassPosition.z - _flattenerPositions[j].z;
+
+                    var nextBending = zero;
+
+                    var xyDistance = xDistance * xDistance + yDistance * yDistance;
+                    var distanceToFlattener = xyDistance + zDistance * zDistance;
+                    var bending = _grassBendings[thousands][subIndex];
+
+                    if (distanceToFlattener > _flattenerConfigs[j].FlattenDistance)
+                    {
+                        // raise flattened grass
+
+                        if (bending.x <= nextBending.x && bending.z <= nextBending.y)
+                        {
+                            _grassBendings[thousands][subIndex].x = 0;
+                            _grassBendings[thousands][subIndex].z = 0;
+                            continue;
+                        }
+
+                        _grassBendings[thousands][subIndex].x += (nextBending.x - bending.x) * deltaTime * _raiseSpeed;
+                        _grassBendings[thousands][subIndex].z += (nextBending.z - bending.z) * deltaTime * _raiseSpeed;
+
+                        continue;
+                    }
+
+                    var abc = new Vector2(xDistance, zDistance).normalized * _flattenerConfigs[j].BendForce;
+                    var abcSqrMagnitude = abc.x * abc.x + abc.y * abc.y;
+                    var bend = abc * Mathf.Clamp(1f / abcSqrMagnitude, 0, 1);
+
+                    // Lay down
+                    Vector2 currentDirection;
+
+                    currentDirection.x = bending.x;
+                    currentDirection.y = bending.z;
+                    var currentDirectionMagnitude = currentDirection.x * currentDirection.x +
+                                                    currentDirection.y * currentDirection.y;
+
+                    if (currentDirectionMagnitude <= 0.4f)
+                    {
+                        nextBending.x = bend.x;
+                        nextBending.z = bend.y;
+
+                        _grassBendings[thousands][subIndex].x +=
+                            (nextBending.x - bending.x) * deltaTime * _flattenSpeed;
+
+                        _grassBendings[thousands][subIndex].z +=
+                            (nextBending.z - bending.z) * deltaTime * _flattenSpeed;
+                    }
+                    else if (bend.sqrMagnitude > currentDirection.sqrMagnitude)
+                    {
+                        var newVec = currentDirection.normalized * bend.magnitude;
+                        nextBending.x = newVec.x;
+                        nextBending.z = newVec.y;
+
+                        _grassBendings[thousands][subIndex].x +=
+                            (nextBending.x - bending.x) * deltaTime * _flattenSpeed;
+
+                        _grassBendings[thousands][subIndex].z +=
+                            (nextBending.z - bending.z) * deltaTime * _flattenSpeed;
+                    }
                 }
 
-                if (_grassCutters.Count > 0)
+                // cut grass
+                for (var j = 0; j < _cutterPositions.Length; j++)
                 {
-                    Cut(thousands, subIndex, column);
+                    var xDistance = grassPosition.x - _cutterPositions[j].x;
+                    var yDistance = grassPosition.y - _cutterPositions[j].y;
+                    var zDistance = grassPosition.z - _cutterPositions[j].z;
+
+                    var distanceToCutter = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
+                    var isGrassGrowedEnough = _grassBendings[thousands][subIndex].y > 0.4f;
+
+                    if (distanceToCutter < _cutterConfigs[j].CutDistance && isGrassGrowedEnough)
+                    {
+                        _grassBendings[thousands][subIndex].y = .0f;
+                        _grassRegrowths[thousands][subIndex] = _growDelays[thousands][subIndex];
+
+                        for (var k = 0; k < _cutParticles.Length; k++)
+                        {
+                            _cutParticles[k].EmitAt(grassPosition,
+                                _grassShaderMaterial.GetColor(TintColor1),
+                                _grassShaderMaterial.GetColor(TintColor2));
+                        }
+                    }
+                }
+
+                // decrease grass regrowth delay
+                if (_grassRegrowths[thousands][subIndex] > 0)
+                {
+                    _grassRegrowths[thousands][subIndex] -= deltaTime;
+                    continue;
+                }
+
+                // regrow grass
+                if (_grassBendings[thousands][subIndex].y < 1)
+                {
+                    _grassBendings[thousands][subIndex].y += _growSpeeds[thousands][subIndex] * deltaTime;
                 }
             }
 
@@ -171,142 +293,57 @@ namespace Grass
             }
         }
 
-        private void UpdateFlattenersPositions()
+        private void UpdateFlattenersData()
         {
             if (_flattenerPositions.Length != _grassFlatteners.Count)
             {
                 _flattenerPositions = new Vector3[_grassFlatteners.Count];
+                _flattenerConfigs = new FlattenerConfig[_grassFlatteners.Count];
             }
 
             for (var i = 0; i < _grassFlatteners.Count; i++)
             {
                 _flattenerPositions[i] = _grassFlatteners[i].transform.position;
+
+                _flattenerConfigs[i] = new FlattenerConfig {
+                    FlattenDistance = _grassFlatteners[i].FlattenDistance,
+                    BendForce = _grassFlatteners[i].BendForce,
+                };
             }
         }
 
-        private void UpdateCuttersPositions()
+        private void UpdateCuttersData()
         {
             if (_cutterPositions.Length != _grassCutters.Count)
             {
                 _cutterPositions = new Vector3[_grassCutters.Count];
+                _cutterConfigs = new CutterConfig[_grassCutters.Count];
             }
 
             for (var i = 0; i < _grassCutters.Count; i++)
             {
                 _cutterPositions[i] = _grassCutters[i].transform.position;
+                _cutterConfigs[i] = new CutterConfig { CutDistance = _grassCutters[i].CutDistance, };
             }
         }
 
-        private void Cut(int thousands, int subindex, Vector4 grassPosition)
+        private void Vector4LerpUnclampedRef(ref Vector4 a, Vector4 b, float t)
         {
-            var count = _cutterPositions.Length;
-
-            for (var i = 0; i < count; i++)
-            {
-                var xDistance = grassPosition.x - _cutterPositions[i].x;
-                var yDistance = grassPosition.y - _cutterPositions[i].y;
-                var zDistance = grassPosition.z - _cutterPositions[i].z;
-
-                var abc = new Vector3(xDistance, yDistance, zDistance);
-                var isGrassGrowedEnough = _grassBendings[thousands][subindex].y > 0.4f;
-
-                if (abc.sqrMagnitude < _grassCutters[i].CutDistance && isGrassGrowedEnough)
-                {
-                    _grassBendings[thousands][subindex].y = .0f;
-
-                    var growSpeed = Random.Range(_growSpeedRange.x, _growSpeedRange.y);
-                    var growDelay = Random.Range(_growDelayRange.x, _growDelayRange.y);
-
-                    StartCoroutine(Regrow(growDelay, growSpeed, thousands, subindex));
-
-                    for (var j = 0; j < _cutParticles.Length; j++)
-                    {
-                        _cutParticles[j].EmitAt(grassPosition,
-                            _grassShaderMaterial.GetColor(TintColor1),
-                            _grassShaderMaterial.GetColor(TintColor2));
-                    }
-                }
-            }
+            a.x += (b.x - a.x) * t;
+            a.y += (b.y - a.y) * t;
+            a.z += (b.z - a.z) * t;
+            a.w += (b.w - a.w) * t;
         }
 
-        private IEnumerator Regrow(float delay, float speed, int thousands, int subIndex)
+        private struct CutterConfig
         {
-            while (delay > 0)
-            {
-                delay -= Time.deltaTime;
-                yield return null;
-            }
-
-            while (_grassBendings[thousands][subIndex].y < 1)
-            {
-                _grassBendings[thousands][subIndex].y += speed * Time.deltaTime;
-                yield return null;
-            }
+            public float CutDistance;
         }
 
-        private void Flatten(int thousands, int subindex, Vector4 grassPosition, float deltaTime, Vector4 zero)
+        private struct FlattenerConfig
         {
-            var count = _flattenerPositions.Length;
-
-            for (var i = 0; i < count; i++)
-            {
-                var xDistance = grassPosition.x - _flattenerPositions[i].x;
-                var yDistance = grassPosition.y - _flattenerPositions[i].y;
-                var zDistance = grassPosition.z - _flattenerPositions[i].z;
-
-                var lerpTarget = zero;
-
-                var distanceToFlattener = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
-
-                if (distanceToFlattener > _grassFlatteners[i].FlattenDistance)
-                {
-                    // Raise
-
-                    var lerpSpeed = deltaTime * _raiseSpeed;
-                    var lerped = Vector4.LerpUnclamped(_grassBendings[thousands][subindex], lerpTarget, lerpSpeed);
-                    _grassBendings[thousands][subindex].x = lerped.x;
-                    _grassBendings[thousands][subindex].z = lerped.z;
-                    continue;
-                }
-
-                var abc = new Vector2(xDistance, zDistance).normalized * _grassFlatteners[i].BendForce;
-                var bend = abc * Mathf.Clamp(1f / abc.sqrMagnitude, 0, 1);
-
-                // Lay down
-                Vector2 currentDirection;
-
-                currentDirection.x = _grassBendings[thousands][subindex].x;
-                currentDirection.y = _grassBendings[thousands][subindex].z;
-
-                if (currentDirection.sqrMagnitude <= 0.4f)
-                {
-                    lerpTarget.x = bend.x;
-                    lerpTarget.z = bend.y;
-
-                    var lerpSpeed = deltaTime * _flattenSpeed;
-                    var lerped = Vector4.LerpUnclamped(_grassBendings[thousands][subindex], lerpTarget, lerpSpeed);
-                    _grassBendings[thousands][subindex].x = lerped.x;
-                    _grassBendings[thousands][subindex].z = lerped.z;
-                }
-                else if (bend.sqrMagnitude > currentDirection.sqrMagnitude)
-                {
-                    var newVec = currentDirection.normalized * bend.magnitude;
-                    lerpTarget.x = newVec.x;
-                    lerpTarget.z = newVec.y;
-
-                    var lerpSpeed = deltaTime * _flattenSpeed;
-                    var lerped = Vector4.LerpUnclamped(_grassBendings[thousands][subindex], lerpTarget, lerpSpeed);
-                    _grassBendings[thousands][subindex].x = lerped.x;
-                    _grassBendings[thousands][subindex].z = lerped.z;
-                }
-            }
-        }
-
-        private void Vector4LerpUnclampedRef(ref Vector4 source, Vector4 target, float t)
-        {
-            var lerped = Vector4.LerpUnclamped(source, target, t);
-            source.x = lerped.x;
-            source.z = lerped.z;
+            public float FlattenDistance;
+            public float BendForce;
         }
     }
 }

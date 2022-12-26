@@ -4,10 +4,9 @@ namespace Grass
 {
     public class GrassFlattener : MonoBehaviour
     {
-        [SerializeField] private float flattenDistance;
-        [SerializeField] private float bendForce;
+        [SerializeField] public float FlattenDistance;
+        [SerializeField] public float BendForce;
 
-        public float FlattenDistance => flattenDistance;
-        public float BendForce => bendForce;
+       
     }
 }
