@@ -112,6 +112,18 @@ namespace Grass
                 grassPosition.y = _grassMatrix[thousands][subIndex].m13;
                 grassPosition.z = _grassMatrix[thousands][subIndex].m23;
                 grassPosition.w = _grassMatrix[thousands][subIndex].m33;
+                
+                var bending = _grassBendings[thousands][subIndex];
+                
+                if (_flattenerPositions.Length > 0)
+                {
+                    // raise flattened grass
+                    
+                    _grassBendings[thousands][subIndex].x +=
+                        (0f - _grassBendings[thousands][subIndex].x) * (deltaTime * _raiseSpeed);
+                    _grassBendings[thousands][subIndex].z +=
+                        (0f - _grassBendings[thousands][subIndex].z) * (deltaTime * _raiseSpeed);
+                }
 
                 // flatten grass
                 for (var j = 0; j < _flattenerPositions.Length; j++)
@@ -120,63 +132,43 @@ namespace Grass
                     var yDistance = grassPosition.y - _flattenerPositions[j].y;
                     var zDistance = grassPosition.z - _flattenerPositions[j].z;
 
-                    var nextBending = zero;
-
-                    var xyDistance = xDistance * xDistance + yDistance * yDistance;
-                    var distanceToFlattener = xyDistance + zDistance * zDistance;
-                    var bending = _grassBendings[thousands][subIndex];
-
+                    var distanceToFlattener = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
+                    
                     if (distanceToFlattener > _flattenerConfigs[j].FlattenDistance)
                     {
-                        // raise flattened grass
-
-                        if (bending.x <= nextBending.x && bending.z <= nextBending.y)
-                        {
-                            _grassBendings[thousands][subIndex].x = 0;
-                            _grassBendings[thousands][subIndex].z = 0;
-                            continue;
-                        }
-
-                        _grassBendings[thousands][subIndex].x += (nextBending.x - bending.x) * deltaTime * _raiseSpeed;
-                        _grassBendings[thousands][subIndex].z += (nextBending.z - bending.z) * deltaTime * _raiseSpeed;
-
                         continue;
                     }
-
+                    
                     var abc = new Vector2(xDistance, zDistance).normalized * _flattenerConfigs[j].BendForce;
-                    var abcSqrMagnitude = abc.x * abc.x + abc.y * abc.y;
-                    var bend = abc * Mathf.Clamp(1f / abcSqrMagnitude, 0, 1);
+                    var bend = abc * Mathf.Clamp(1f / abc.sqrMagnitude, 0, 1);
 
                     // Lay down
                     Vector2 currentDirection;
 
                     currentDirection.x = bending.x;
                     currentDirection.y = bending.z;
-                    var currentDirectionMagnitude = currentDirection.x * currentDirection.x +
-                                                    currentDirection.y * currentDirection.y;
-
-                    if (currentDirectionMagnitude <= 0.4f)
+                   
+                    if (currentDirection.sqrMagnitude <= 0.4f)
                     {
-                        nextBending.x = bend.x;
-                        nextBending.z = bend.y;
-
                         _grassBendings[thousands][subIndex].x +=
-                            (nextBending.x - bending.x) * deltaTime * _flattenSpeed;
+                            (bend.x - bending.x) * (deltaTime * _flattenSpeed);
 
                         _grassBendings[thousands][subIndex].z +=
-                            (nextBending.z - bending.z) * deltaTime * _flattenSpeed;
+                            (bend.y - bending.z) * (deltaTime * _flattenSpeed);
+                        
+                        continue;
                     }
-                    else if (bend.sqrMagnitude > currentDirection.sqrMagnitude)
+
+                    if (bend.sqrMagnitude > currentDirection.sqrMagnitude)
                     {
                         var newVec = currentDirection.normalized * bend.magnitude;
-                        nextBending.x = newVec.x;
-                        nextBending.z = newVec.y;
 
                         _grassBendings[thousands][subIndex].x +=
-                            (nextBending.x - bending.x) * deltaTime * _flattenSpeed;
+                            (newVec.x - bending.x) * (deltaTime * _flattenSpeed);
 
                         _grassBendings[thousands][subIndex].z +=
-                            (nextBending.z - bending.z) * deltaTime * _flattenSpeed;
+                            (newVec.y - bending.z) * (deltaTime * _flattenSpeed);
+
                     }
                 }
 
