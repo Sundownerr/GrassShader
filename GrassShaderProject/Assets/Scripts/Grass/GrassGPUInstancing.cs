@@ -33,10 +33,10 @@ namespace Grass
 
         [Space(3)] [Header("- PARTICLE  SETTINGS -")] [SerializeField]
         private CutParticle[] _cutParticles;
-        private CutterConfig[] _cutterConfigs;
 
+        private CutterConfig[] _cutterConfigs = new CutterConfig[1];
         private Vector3[] _cutterPositions = new Vector3[1];
-        private FlattenerConfig[] _flattenerConfigs;
+        private FlattenerConfig[] _flattenerConfigs = new FlattenerConfig[1];
         private Vector3[] _flattenerPositions = new Vector3[1];
         private Vector4[][] _grassBendings;
         private MaterialPropertyBlock _grassMaterialPropertyBlock;
@@ -112,13 +112,13 @@ namespace Grass
                 grassPosition.y = _grassMatrix[thousands][subIndex].m13;
                 grassPosition.z = _grassMatrix[thousands][subIndex].m23;
                 grassPosition.w = _grassMatrix[thousands][subIndex].m33;
-                
+
                 var bending = _grassBendings[thousands][subIndex];
-                
+
                 if (_flattenerPositions.Length > 0)
                 {
                     // raise flattened grass
-                    
+
                     _grassBendings[thousands][subIndex].x +=
                         (0f - _grassBendings[thousands][subIndex].x) * (deltaTime * _raiseSpeed);
                     _grassBendings[thousands][subIndex].z +=
@@ -133,12 +133,12 @@ namespace Grass
                     var zDistance = grassPosition.z - _flattenerPositions[j].z;
 
                     var distanceToFlattener = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
-                    
+
                     if (distanceToFlattener > _flattenerConfigs[j].FlattenDistance)
                     {
                         continue;
                     }
-                    
+
                     var abc = new Vector2(xDistance, zDistance).normalized * _flattenerConfigs[j].BendForce;
                     var bend = abc * Mathf.Clamp(1f / abc.sqrMagnitude, 0, 1);
 
@@ -147,7 +147,7 @@ namespace Grass
 
                     currentDirection.x = bending.x;
                     currentDirection.y = bending.z;
-                   
+
                     if (currentDirection.sqrMagnitude <= 0.4f)
                     {
                         _grassBendings[thousands][subIndex].x +=
@@ -155,7 +155,7 @@ namespace Grass
 
                         _grassBendings[thousands][subIndex].z +=
                             (bend.y - bending.z) * (deltaTime * _flattenSpeed);
-                        
+
                         continue;
                     }
 
@@ -168,7 +168,6 @@ namespace Grass
 
                         _grassBendings[thousands][subIndex].z +=
                             (newVec.y - bending.z) * (deltaTime * _flattenSpeed);
-
                     }
                 }
 
