@@ -212,6 +212,45 @@ namespace Grass
             DrawGrassMeshes();
         }
 
+        public void SetGrowSpeed(Vector2 range)
+        {
+            _growSpeedRange = range;
+            var subCount = 1000;
+            var count = _scannedGrassPositions.Count / subCount + 1;
+
+            for (var i = 0; i < count; i++)
+            {
+                _growSpeeds[i] = new float[subCount];
+
+                for (var j = 0; j < _growSpeeds[i].Length; j++)
+                {
+                    _growSpeeds[i][j] = Random.Range(_growSpeedRange.x, _growSpeedRange.y);
+                }
+            }
+        }
+
+        public void SetGrowDelay(Vector2 range)
+        {
+            _growDelayRange = range;
+            var subCount = 1000;
+            var count = _scannedGrassPositions.Count / subCount + 1;
+
+            for (var i = 0; i < count; i++)
+            {
+                _growDelays[i] = new float[subCount];
+
+                for (var j = 0; j < _growDelays[i].Length; j++)
+                {
+                    _growDelays[i][j] = Random.Range(_growDelayRange.x, _growDelayRange.y);
+
+                    if (_grassRegrowths[i][j] > _growDelays[i][j])
+                    {
+                        _grassRegrowths[i][j] = _growDelays[i][j];
+                    }
+                }
+            }
+        }
+
         public void AddGrassCutter(GrassCutter grassCutter)
         {
             _grassCutters.Add(grassCutter);
