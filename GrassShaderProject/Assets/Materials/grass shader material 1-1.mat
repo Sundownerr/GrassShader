@@ -176,7 +176,7 @@ Material:
     - _Ior: 1
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
-    - _LightIntensity: 1.27
+    - _LightIntensity: 1.23
     - _LinkDetailsWithBase: 1
     - _MaterialID: 1
     - _Metallic: 0
@@ -247,8 +247,8 @@ Material:
     - _IridescenceThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
-    - _TintColor1: {r: 0, g: 0.3773585, b: 0.23480083, a: 1}
-    - _TintColor2: {r: 0, g: 1, b: 0.59148264, a: 1}
+    - _TintColor1: {r: 0.7830189, g: 0.5756183, b: 0, a: 1}
+    - _TintColor2: {r: 0.99034953, g: 1, b: 0, a: 1}
     - _TransmittanceColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDetailsMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
