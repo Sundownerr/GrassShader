@@ -220,8 +220,6 @@ namespace Grass
 
             for (var i = 0; i < count; i++)
             {
-                _growSpeeds[i] = new float[subCount];
-
                 for (var j = 0; j < _growSpeeds[i].Length; j++)
                 {
                     _growSpeeds[i][j] = Random.Range(_growSpeedRange.x, _growSpeedRange.y);
@@ -237,8 +235,6 @@ namespace Grass
 
             for (var i = 0; i < count; i++)
             {
-                _growDelays[i] = new float[subCount];
-
                 for (var j = 0; j < _growDelays[i].Length; j++)
                 {
                     _growDelays[i][j] = Random.Range(_growDelayRange.x, _growDelayRange.y);
