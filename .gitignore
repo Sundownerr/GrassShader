@@ -5,3 +5,4 @@ GrassShaderProject/Logs/
 GrassShaderProject/.idea/
 GrassShaderProject/Recordings/
 GrassShaderProject/obj/
+*.csproj
